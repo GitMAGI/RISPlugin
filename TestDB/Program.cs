@@ -14,7 +14,7 @@ namespace TestDB
             RISDAL dal = new RISDAL();
             RISBLL bll = new RISBLL(dal);
 
-            string richID = "20160804111023719";
+            //string richID = "20160804111023719";
             string episID = "490937";
 
             //RichiestaRISDTO rich = bll.GetRichiestaRISById(richID);

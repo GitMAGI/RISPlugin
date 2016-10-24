@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IDAL.VO
+﻿namespace IDAL.VO
 {
     public class RichiestaRISVO
     {
         public string data { get; set; }
         public string data_creazione { get; set; }
         public string data_modifica { get; set; }
-        public bool dimprotetta { get; set; }
+        public bool? dimprotetta { get; set; }
         public string esami { get; set; }
         public string idepisodio { get; set; }
         public string locker { get; set; }
@@ -23,9 +17,9 @@ namespace IDAL.VO
         public string ora { get; set; }
         public string pdfcreato { get; set; }
         public string quesitoclinico { get; set; }
-        public long seriale { get; set; }
+        public long? seriale { get; set; }
         public string statopaziente { get; set; }
-        public bool urgente { get; set; }
+        public bool? urgente { get; set; }
         public string versione { get; set; }
     }
 }
