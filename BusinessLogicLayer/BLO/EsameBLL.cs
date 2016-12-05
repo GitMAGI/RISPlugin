@@ -9,7 +9,7 @@ namespace BusinessLogicLayer
 {
     public partial class RISBLL
     {
-        public List<IBLL.DTO.EsameDTO> GetEsamiByRich(string richidid)
+        public List<IBLL.DTO.EsameDTO> GetEsamiByRichiesta(string richidid)
         {
             Stopwatch tw = new Stopwatch();
             tw.Start();
@@ -20,38 +20,9 @@ namespace BusinessLogicLayer
 
             try
             {
-                log.Info(string.Format("Getting RichiestaRIS by ID:'{0}' ... ", richidid));
-                IBLL.DTO.RichiestaRISDTO rich = GetRichiestaRISById(richidid);
-                if (rich != null)
-                {
-                    if(rich.esami != null && rich.esami != string.Empty)
-                    {
-                        log.Info(string.Format("Fetching IDs esame ... "));
-                        string esamids_ = rich.esami;
-                        string[] esamids = esamids_.Split(',');
-
-                        if (esamids.Length >= 0)
-                        {
-                            log.Info(string.Format("Got {0} ID esame incapsulated into RichiestaRIS with ID:'{1}'!", esamids.Length, richidid));
-                            foreach (string esamid in esamids)
-                            {
-                                IBLL.DTO.EsameDTO tmp = GetEsameById(esamid);
-                                if (tmp != null)
-                                {
-                                    log.Info(string.Format("Adding esame with ID:'{0}' to Collection ... ", tmp.esameidid));
-                                    if (esams == null)
-                                        esams = new List<IBLL.DTO.EsameDTO>();
-                                    esams.Add(tmp);
-                                }
-                            }
-                            log.Info(string.Format("Built a Collection with {0} esami!", esams.Count));
-                        }
-                    }
-                    else
-                    {
-                        log.Info(string.Format("No IDs esame in this RichiestaRIS!"));
-                    }                                   
-                }                
+                List<IDAL.VO.EsameVO> dalRes = dal.GetEsamiByRichiesta(richidid);
+                esams = EsameMapper.EsamMapper(dalRes);
+                log.Info(string.Format("{0} VOs mapped to {1}", LibString.ItemsNumber(esams), LibString.TypeName(esams)));
             }
             catch (Exception ex)
             {
@@ -65,54 +36,6 @@ namespace BusinessLogicLayer
 
             return esams;
         }
-
-        public List<IBLL.DTO.EsameDTO> GetEsamiByEpis(string episidid)
-        {
-            Stopwatch tw = new Stopwatch();
-            tw.Start();
-
-            log.Info(string.Format("Starting ..."));
-
-            List<IBLL.DTO.EsameDTO> esams = null;
-
-            try
-            {
-                log.Info(string.Format("Getting RichiestaRIS by Epis ID:'{0}' ... ", episidid));
-                List<IBLL.DTO.RichiestaRISDTO> richs = GetRichiesteRISByEpis(episidid);
-                if (richs != null)
-                {
-                    foreach(IBLL.DTO.RichiestaRISDTO rich in richs)
-                    {
-                        if (rich != null)
-                        {
-                            log.Info(string.Format("Getting Esami incapsulated into RichiestaRIS with ID:'{0}' ... ", rich.objectid));
-                            List<IBLL.DTO.EsameDTO> esams_ = GetEsamiByRich(rich.objectid);
-                            if (esams_ != null)
-                            {
-                                log.Info(string.Format("Adding Range with {0} items to Collection ... ", esams_.Count));
-                                if (esams == null)
-                                    esams = new List<IBLL.DTO.EsameDTO>();
-                                esams.AddRange(esams_);
-                            }
-                        }                            
-                    }
-                    log.Info(string.Format("Built a Collection with {0} esami!", esams.Count));
-                }
-                log.Info(string.Format("{0} VO mapped to {1}", esams.Count, esams.First().GetType().ToString()));
-            }
-            catch (Exception ex)
-            {
-                string msg = "An Error occured! Exception detected!";
-                log.Info(msg);
-                log.Error(msg + "\n" + ex.Message);
-            }
-
-            tw.Stop();
-            log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
-
-            return esams;
-        }
-        
         public IBLL.DTO.EsameDTO GetEsameById(string esamidid)
         {
             Stopwatch tw = new Stopwatch();
@@ -126,7 +49,7 @@ namespace BusinessLogicLayer
             {
                 IDAL.VO.EsameVO dalRes = this.dal.GetEsameById(esamidid);
                 esam = EsameMapper.EsamMapper(dalRes);
-                log.Info(string.Format("1 VO mapped to {0}", esam.GetType().ToString()));
+                log.Info(string.Format("{0} VOs mapped to {1}", LibString.ItemsNumber(esam), LibString.TypeName(esam)));
             }
             catch (Exception ex)
             {
@@ -140,20 +63,20 @@ namespace BusinessLogicLayer
 
             return esam;
         }
-        public int UpdateEsameById(IBLL.DTO.EsameDTO data, string esamidid)
+        public List<IBLL.DTO.EsameDTO> GetEsamiByIds(List<string> esamidids)
         {
             Stopwatch tw = new Stopwatch();
             tw.Start();
 
             log.Info(string.Format("Starting ..."));
 
-            int result = 0;
+            List<IBLL.DTO.EsameDTO> anals = null;
 
             try
             {
-                IDAL.VO.EsameVO data_ = EsameMapper.EsamMapper(data);
-                log.Info(string.Format("1 {0} mapped to {1}", data.GetType().ToString(), data_.GetType().ToString()));
-                result = dal.SetEsame(data_, esamidid);
+                List<IDAL.VO.EsameVO> esams_ = dal.GetEsamiByIds(esamidids);
+                anals = EsameMapper.EsamMapper(esams_);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(anals), LibString.TypeName(esams_), LibString.TypeName(anals)));
             }
             catch (Exception ex)
             {
@@ -165,22 +88,25 @@ namespace BusinessLogicLayer
             tw.Stop();
             log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
 
-            return result;
+            return anals;
         }
-        public int AddEsame(IBLL.DTO.EsameDTO data)
+        public IBLL.DTO.EsameDTO UpdateEsame(IBLL.DTO.EsameDTO data)
         {
             Stopwatch tw = new Stopwatch();
             tw.Start();
 
             log.Info(string.Format("Starting ..."));
 
-            int result = 0;
+            int stored = 0;
+            IBLL.DTO.EsameDTO toReturn = null;
 
             try
             {
                 IDAL.VO.EsameVO data_ = EsameMapper.EsamMapper(data);
-                log.Info(string.Format("1 {0} mapped to {1}", data.GetType().ToString(), data_.GetType().ToString()));
-                result = dal.SetEsame(data_);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(data_), LibString.TypeName(data), LibString.TypeName(data_)));
+                stored = dal.SetEsame(data_);
+                toReturn = GetEsameById(data.radioidid.ToString());
+                log.Info(string.Format("{0} {1} items added and {2} {3} retrieved back!", stored, LibString.TypeName(data_), LibString.ItemsNumber(toReturn), LibString.TypeName(toReturn)));
             }
             catch (Exception ex)
             {
@@ -192,7 +118,69 @@ namespace BusinessLogicLayer
             tw.Stop();
             log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
 
-            return result;
+            return toReturn;
+        }
+        public IBLL.DTO.EsameDTO AddEsame(IBLL.DTO.EsameDTO data)
+        {
+            Stopwatch tw = new Stopwatch();
+            tw.Start();
+
+            log.Info(string.Format("Starting ..."));
+
+            IBLL.DTO.EsameDTO toReturn = null;
+
+            try
+            {
+                data.radioidid = null;
+                IDAL.VO.EsameVO data_ = EsameMapper.EsamMapper(data);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(data_), LibString.TypeName(data), LibString.TypeName(data_)));
+                IDAL.VO.EsameVO stored = dal.NewEsame(data_);
+                log.Info(string.Format("{0} {1} items added and got back!", LibString.ItemsNumber(stored), LibString.TypeName(stored)));
+                toReturn = EsameMapper.EsamMapper(stored);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(toReturn), LibString.TypeName(stored), LibString.TypeName(toReturn)));
+            }
+            catch (Exception ex)
+            {
+                string msg = "An Error occured! Exception detected!";
+                log.Info(msg);
+                log.Error(msg + "\n" + ex.Message);
+            }
+
+            tw.Stop();
+            log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
+
+            return toReturn;
+        }
+        public List<IBLL.DTO.EsameDTO> AddEsami(List<IBLL.DTO.EsameDTO> data)
+        {
+            Stopwatch tw = new Stopwatch();
+            tw.Start();
+
+            log.Info(string.Format("Starting ..."));
+
+            List<IBLL.DTO.EsameDTO> toReturn = null;
+
+            try
+            {
+                data.ForEach(p => p.radioidid = null);
+                List<IDAL.VO.EsameVO> data_ = EsameMapper.EsamMapper(data);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(data_), LibString.TypeName(data), LibString.TypeName(data_)));
+                List<IDAL.VO.EsameVO> stored = dal.NewEsami(data_);
+                log.Info(string.Format("{0} {1} items added and got back!", LibString.ItemsNumber(stored), LibString.TypeName(stored)));
+                toReturn = EsameMapper.EsamMapper(stored);
+                log.Info(string.Format("{0} {1} mapped to {2}", LibString.ItemsNumber(toReturn), LibString.TypeName(stored), LibString.TypeName(toReturn)));
+            }
+            catch (Exception ex)
+            {
+                string msg = "An Error occured! Exception detected!";
+                log.Info(msg);
+                log.Error(msg + "\n" + ex.Message);
+            }
+
+            tw.Stop();
+            log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
+
+            return toReturn;
         }
         public int DeleteEsameById(string esamidid)
         {
@@ -205,7 +193,34 @@ namespace BusinessLogicLayer
 
             try
             {
-                result = dal.DeleteEsame(esamidid);
+                result = dal.DeleteEsameById(esamidid);
+                log.Info(string.Format("{0} items Deleted!", result));
+            }
+            catch (Exception ex)
+            {
+                string msg = "An Error occured! Exception detected!";
+                log.Info(msg);
+                log.Error(msg + "\n" + ex.Message);
+            }
+
+            tw.Stop();
+            log.Info(string.Format("Completed! Elapsed time {0}", LibString.TimeSpanToTimeHmsms(tw.Elapsed)));
+
+            return result;
+        }
+        public int DeleteEsamiByRichiesta(string richidid)
+        {
+            Stopwatch tw = new Stopwatch();
+            tw.Start();
+
+            log.Info(string.Format("Starting ..."));
+
+            int result = 0;
+
+            try
+            {
+                result = dal.DeleteEsameById(richidid);
+                log.Info(string.Format("{0} items Deleted!", result));
             }
             catch (Exception ex)
             {

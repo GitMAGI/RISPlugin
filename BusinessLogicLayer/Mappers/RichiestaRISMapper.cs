@@ -28,7 +28,6 @@ namespace BusinessLogicLayer.Mappers
 
             return rich;
         }
-
         public static List<IBLL.DTO.RichiestaRISDTO> RichMapper(List<IDAL.VO.RichiestaRISVO> raws)
         {
             List<IBLL.DTO.RichiestaRISDTO> res = null;
@@ -39,6 +38,41 @@ namespace BusinessLogicLayer.Mappers
                 foreach (IDAL.VO.RichiestaRISVO raw in raws)
                 {
                     res.Add(RichMapper(raw));
+                }
+            }
+
+            return res;
+        }
+        public static IDAL.VO.RichiestaRISVO RichMapper(IBLL.DTO.RichiestaRISDTO dto)
+        {
+            IDAL.VO.RichiestaRISVO rich = null;
+            try
+            {
+                Mapper.Initialize(cfg => cfg.CreateMap<IBLL.DTO.RichiestaRISDTO, IDAL.VO.RichiestaRISVO>());
+                Mapper.AssertConfigurationIsValid();
+                rich = Mapper.Map<IDAL.VO.RichiestaRISVO>(dto);
+            }
+            catch (AutoMapperConfigurationException ex)
+            {
+                log.Error(string.Format("AutoMapper Configuration Error!\n{0}", ex.Message));
+            }
+            catch (AutoMapperMappingException ex)
+            {
+                log.Error(string.Format("AutoMapper Mapping Error!\n{0}", ex.Message));
+            }
+
+            return rich;
+        }
+        public static List<IDAL.VO.RichiestaRISVO> RichMapper(List<IBLL.DTO.RichiestaRISDTO> dtos)
+        {
+            List<IDAL.VO.RichiestaRISVO> res = null;
+
+            if (dtos != null)
+            {
+                res = new List<IDAL.VO.RichiestaRISVO>();
+                foreach (IBLL.DTO.RichiestaRISDTO dto in dtos)
+                {
+                    res.Add(RichMapper(dto));
                 }
             }
 

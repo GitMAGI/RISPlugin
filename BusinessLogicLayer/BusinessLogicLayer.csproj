@@ -48,13 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLO\EpisodioBLL.cs" />
     <Compile Include="BLO\EsameBLL.cs" />
-    <Compile Include="BLO\PazienteBLL.cs" />
+    <Compile Include="BLO\EventoBLL.cs" />
     <Compile Include="BLO\RichiestaRISBLL.cs" />
-    <Compile Include="Mappers\EpisodioMapper.cs" />
+    <Compile Include="MainAccessBLL.cs" />
     <Compile Include="Mappers\EsameMapper.cs" />
-    <Compile Include="Mappers\PazienteMapper.cs" />
+    <Compile Include="Mappers\EventoMapper.cs" />
     <Compile Include="Mappers\RichiestaRISMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RISBLL.cs" />

@@ -1,26 +1,41 @@
-﻿namespace IBLL.DTO
+﻿using System;
+
+namespace IBLL.DTO
 {
     public class RichiestaRISDTO
     {
-        public string data { get; set; }
-        public string data_creazione { get; set; }
-        public string data_modifica { get; set; }
-        public bool? dimprotetta { get; set; }
-        public string esami { get; set; }
-        public string idepisodio { get; set; }
-        public string locker { get; set; }
-        public string motivo { get; set; }
-        public string nomeesami { get; set; }
-        public string nomeutente_creazione { get; set; }
-        public string nomeutente_modifica { get; set; }
-        public string objectid { get; set; }
-        public string ora { get; set; }
-        public string pdfcreato { get; set; }
-        public string quesitoclinico { get; set; }
-        public long? seriale { get; set; }
-        public string statopaziente { get; set; }
-        public bool? urgente { get; set; }
-        public string versione { get; set; }
-
+        public int? presidid { get; set; }
+        public int? preseven { get; set; }
+        public string presques { get; set; }
+        public string prescons { get; set; }
+        public short? presstat { get; set; }
+        public int? prestipo { get; set; }
+        public bool? presurge { get; set; }
+        public DateTime? prespren { get; set; }
+        public int? presrico { get; set; }
+        public DateTime? presesec { get; set; }
+        public int? presflcc { get; set; }
+        public int? presconf { get; set; }
+        public string presdmod { get; set; }
+        public string presnote { get; set; }
+        public DateTime? presdtri { get; set; }
+        public DateTime? presdtco { get; set; }
+        public string prespers { get; set; }
+        public short? preserog { get; set; }
+        public DateTime? prespren2 { get; set; }
+        public int? presdimi { get; set; }
+        public int? presecocardio { get; set; }
+        public int? presvisicardio { get; set; }
+        public long? presappu { get; set; }
+        public int? presannu { get; set; }
+        public string hl7_stato { get; set; }
+        public string hl7_msg { get; set; }
+        public int? prespadre { get; set; }
+        public int? presconscardio { get; set; }
+        public int? prespagatipo { get; set; }
+        public int? prespagastat { get; set; }
+        public DateTime? prespagadata { get; set; }
+        public int? prespagauser { get; set; }
+        public string prescdc { get; set; }
     }
 }

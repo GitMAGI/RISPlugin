@@ -28,7 +28,6 @@ namespace BusinessLogicLayer.Mappers
 
             return esam;
         }
-
         public static List<IBLL.DTO.EsameDTO> EsamMapper(List<IDAL.VO.EsameVO> raws)
         {
             List<IBLL.DTO.EsameDTO> res = null;
@@ -44,7 +43,6 @@ namespace BusinessLogicLayer.Mappers
 
             return res;
         }
-
         public static IDAL.VO.EsameVO EsamMapper(IBLL.DTO.EsameDTO data)
         {
             IDAL.VO.EsameVO esam = null;
@@ -65,6 +63,21 @@ namespace BusinessLogicLayer.Mappers
 
             return esam;
         }
-    
+        public static List<IDAL.VO.EsameVO> EsamMapper(List<IBLL.DTO.EsameDTO> dtos)
+        {
+            List<IDAL.VO.EsameVO> res = null;
+
+            if (dtos != null)
+            {
+                res = new List<IDAL.VO.EsameVO>();
+                foreach (IBLL.DTO.EsameDTO raw in dtos)
+                {
+                    res.Add(EsamMapper(raw));
+                }
+            }
+
+            return res;
+        }
+
     }
 }

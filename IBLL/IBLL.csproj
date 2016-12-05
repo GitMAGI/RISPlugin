@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\EpisodioDTO.cs" />
     <Compile Include="DTO\EsameDTO.cs" />
-    <Compile Include="DTO\PazienteDTO.cs" />
+    <Compile Include="DTO\EventoDTO.cs" />
+    <Compile Include="DTO\MirthResponseDTO.cs" />
     <Compile Include="DTO\RichiestaRISDTO.cs" />
+    <Compile Include="HL7StatesEsame.cs" />
+    <Compile Include="HL7StatesRichiestaRIS.cs" />
     <Compile Include="IRISBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
